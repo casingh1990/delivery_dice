@@ -1,0 +1,3 @@
+# Instructions
+
+Implement a class that can determine whether an order is paid in full.  An order consists of one or more items and one or more payments.  Make sure you add appropriate error handling, exception handling, logging, and assertions as appropriate. Your implementation should reflect how you would approach this problem, what additional classes you think are necessary, what design patterns would be helpful, and any other considerations for the purpose of demonstrating your understanding of best practices and e-commerce considerations.
