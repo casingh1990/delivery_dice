@@ -1,4 +1,5 @@
 <?php
+require __DIR__ . '/vendor/autoload.php';
 
 use DeliveryDotCom\Models\MyDice;
 use DeliveryDotCom\Models\D10;
@@ -20,4 +21,3 @@ $container->attach(new AnyDie([0, 0, 1, 2, 3, 3])); // A die with arbitrary face
 $total = $container->getTotal();
 
 echo "Total of all dice: $total\n";
-
