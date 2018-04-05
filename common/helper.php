@@ -1,7 +1,7 @@
 <?php
 
 if (!function_exists("log_my_error")){
-  log_my_error($message){
+  function log_my_error($message){
     if (!isset($CONFIG['logdir'])){
       error_log("Log file configuration not set");
     }

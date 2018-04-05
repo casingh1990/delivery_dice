@@ -29,6 +29,11 @@ class Order implements OrderInterface
    */
   private $sales_tax;
   /**
+   * Sales tax in dollars
+   * @var Number
+   */
+  private $sales_tax_amount;
+  /**
    * @var Number - The total amount paid on this order
    **/
   private $total_paid;
@@ -64,10 +69,10 @@ class Order implements OrderInterface
   public function calculate_order_total(){
     $this->order_total = 0;
     foreach($this->items as $item){
-      $this->order_total += $item->getAmount() * $this->item_quantities[$item->getID()];
+      $this->order_total += $this->getItemSubTotal($item);
     }
-    $this->order_total += ($this->order_total * $this->sales_tax);
-    return $this->order_total;
+    $this->sales_tax_amount = ($this->order_total * $this->sales_tax);
+    return $this->order_total + $this->sales_tax_amount;
   }
 
   /**
@@ -107,8 +112,6 @@ class Order implements OrderInterface
       $this->items[] = $item;
       $this->item_quantities[$item->getID()] = 1;
     }
-    //recalculate order total;
-    $this->order_total += $item->getAmount() * $this->item_quantities[$item->getID()];
   }
 
   /**
@@ -120,10 +123,35 @@ class Order implements OrderInterface
   }
 
   /**
+   * Calculates the subtotal for an item
+   * @param  Item $item The item to calculate the subTotal for
+   * @return [type]       [description]
+   */
+  public function getItemSubTotal($item){
+    return $item->getAmount() * $this->item_quantities[$item->getID()];
+  }
+
+  /**
   * @return bool true if the order has been paid in full, false if not.
   */
   public function isPaidInFull(){
+    //use the calculated values to ensure that total paid and ordered are correct
     return ($this->calculate_total_paid() >= $this->calculate_order_total());
+  }
+
+  public function getInvoiceString(){
+    $order_total_inc_tax = $this->calculate_order_total();
+    $total_paid = $this->calculate_total_paid();
+    $string = "Item\t\tPrice\t\tQuantity\tSubTotal\n";
+    foreach($this->items as $item){
+      $string .= $item->getName() . "\t\t" . $item->getAmount() . "\t\t" . $this->item_quantities[$item->getID()] . "\t\t" . $this->getItemSubTotal($item) . "\n";
+    }
+    $string .= "Sub Total \t\t \t\t \t" . $this->order_total . "\n";
+    $string .= "Tax @\t\t " . ($this->sales_tax * 100) . "\t\t \t\t" . $this->sales_tax_amount . "\n";
+    $string .= "Total \t\t \t\t \t\t" . $order_total_inc_tax . "\n";
+    $string .= "Total Paid \t\t \t\t \t" . $total_paid . "\n";
+    $string .= "Total Due \t\t \t\t \t" . ($order_total_inc_tax - $total_paid) . "\n";
+    return $string;
   }
 
   /**
@@ -139,5 +167,13 @@ class Order implements OrderInterface
       ];
     }
     return $order_items;
+  }
+
+  /**
+   * Get all payments made on this order
+   * @return Array All payments made on this order
+   */
+  public function getPayments(){
+    return $this->payments;
   }
 }
