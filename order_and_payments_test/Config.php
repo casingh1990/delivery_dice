@@ -1,5 +1,6 @@
 <?php
 
-const $CONFIG = array(
-  "logdir" => "log";
-);
+define('CONFIG', [
+  "logdir" => "log",
+  "sales_tax" => 7.5,
+]);
