@@ -14,11 +14,19 @@ try{
   $chicken = new Item("chicken", 10);
   $lettuce = new Item("lettuce", 4);
 
-  $order->addItem($fish);
-  $order->addItem($chicken);
-  $order->addItem($lettuce);
+  $payment = new Payment(50, Payment::CASH);
 
-  $order->addPayment(new Payment(50, Payment::CASH));
+  //assuming that logging will be handled by a controller class / middleware
+
+  $order->addItem($fish);
+  custom_log("Added item " . $fish->toString() . "\n");
+  $order->addItem($chicken);
+  custom_log("Added item " . $chicken->toString() . "\n");
+  $order->addItem($lettuce);
+  custom_log("Added item " . $lettuce->toString() . "\n");
+
+  $order->addPayment($payment);
+  custom_log("Added Payment " . $payment->toString() . "\n");
 
   echo $order->getInvoiceString();
   echo ( ($order->isPaidInFull())?"Order is Paid in full":"Order is not paid in full" ) . "\n";
