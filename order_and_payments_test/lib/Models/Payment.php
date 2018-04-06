@@ -89,4 +89,33 @@ class Payment implements PaymentInterface
     }
   }
 
+  /**
+   * Returns the type of this order in string format.
+   * @return String
+   */
+  public function getTypeString(){
+    switch($this->type){
+      case Payment::CASH:
+        return "CASH";
+        break;
+      case Payment::CREDIT_CARD:
+        return "CREDIT CARD";
+        break;
+      case Payment:REFUND:
+        return "REFUND";
+        break;
+      default:
+        throw new Exception("Unknown type");
+        break;
+    }
+  }
+
+  /**
+   * Gets a String representation of this payment.
+   * @return String
+   */
+  public function toString(){
+    return $this->getTypeString() . " " . $this->getAmount();
+  }
+
 }//end class
