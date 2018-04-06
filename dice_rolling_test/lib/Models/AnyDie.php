@@ -22,9 +22,9 @@ class AnyDie implements DiceInterface
     if (is_array($sides)){
       $this->sides = $sides;
     }
-    /**
-     * @todo handle error
-     **/
+    else {
+      throw new Exception('Not an array');
+    }
   }
 
   /**
